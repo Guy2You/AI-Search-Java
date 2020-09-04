@@ -1,8 +1,10 @@
+package AISearch;
+
 import java.util.ArrayList;
 
 public abstract class AbstractSearchNode
 {
-	private AbstractSearchNode parentNode;
+	private final AbstractSearchNode parentNode;
 	private int nodeDepth;
 
 
