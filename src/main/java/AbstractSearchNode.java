@@ -17,6 +17,7 @@ public abstract class AbstractSearchNode
 
 	/**
 	 * Constructs a new ASN. This constructor should be used when creating a child node.
+	 *
 	 * @param parentNode The parent of the new node.
 	 */
 	public AbstractSearchNode(AbstractSearchNode parentNode)
