@@ -104,7 +104,7 @@ public class AISearch
 					return node;
 				}
 				boolean addToFringe = true;
-				if (currentNode.getNodeDepth() < depthLimit - 1)
+				if (!(currentNode.getNodeDepth() < depthLimit - 1))
 				{
 					addToFringe = false;
 				} else if (pruneExpandedNodes)
@@ -213,7 +213,7 @@ public class AISearch
 		AbstractSearchNode currentNode;
 		while (!fringe.isEmpty())
 		{
-			currentNode = fringe.get(0);
+			currentNode = fringe.remove(0);
 			if (pruneExpandedNodes)
 			{
 				expandedNodes.add(currentNode);
@@ -226,7 +226,7 @@ public class AISearch
 					return node;
 				}
 				boolean addToFringe = true;
-				if (currentNode.getNodeDepth() < depthLimit - 1)
+				if (!(currentNode.getNodeDepth() < depthLimit - 1))
 				{
 					addToFringe = false;
 				} else if (pruneExpandedNodes)
