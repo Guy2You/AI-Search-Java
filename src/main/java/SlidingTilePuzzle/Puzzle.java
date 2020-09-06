@@ -1,4 +1,4 @@
-package SlidePuzzle;
+package SlidingTilePuzzle;
 
 import AISearch.AbstractSearchNode;
 
@@ -10,7 +10,7 @@ public class Puzzle extends AbstractSearchNode
 {
 
 	private int[][] grid;
-	private int sideLength;
+	private final int sideLength;
 
 	public Puzzle(int sideLength)
 	{
@@ -19,6 +19,15 @@ public class Puzzle extends AbstractSearchNode
 		this.grid = getNewGrid();
 
 		shuffleGrid();
+	}
+
+	public Puzzle(int sideLength, int shuffleMoves)
+	{
+		super();
+		this.sideLength = sideLength;
+		this.grid = getNewGrid();
+
+		shuffleGrid(shuffleMoves);
 	}
 
 	private Puzzle(Puzzle parentNode, int[][] grid)
@@ -33,9 +42,19 @@ public class Puzzle extends AbstractSearchNode
 		return grid;
 	}
 
+	public void setGrid(int[][] grid)
+	{
+		this.grid = grid;
+	}
+
 	public int getSideLength()
 	{
 		return sideLength;
+	}
+
+	public void resetGrid()
+	{
+		this.grid = getNewGrid();
 	}
 
 	private int[][] getNewGrid()
@@ -54,14 +73,19 @@ public class Puzzle extends AbstractSearchNode
 		return newGrid;
 	}
 
-	private void shuffleGrid()
+	public void shuffleGrid()
 	{
-		Random randomInt = new Random();
 		int numMoves = (int) Math.pow(this.sideLength, 3);
-		System.out.printf("Shuffling %s moves.%n", numMoves);
+		shuffleGrid(numMoves);
+	}
+
+	public void shuffleGrid(int numMoves)
+	{
+		//System.out.printf("Shuffling %s moves.%n", numMoves);
+		Random random = new Random();
 		for (int i = 0; i < numMoves; i++)
 		{
-			switch (randomInt.nextInt(4))
+			switch (random.nextInt(4))
 			{
 				case 0 -> this.grid = moveBlankUp();
 				case 1 -> this.grid = moveBlankDown();
@@ -69,7 +93,6 @@ public class Puzzle extends AbstractSearchNode
 				case 3 -> this.grid = moveBlankRight();
 			}
 		}
-
 	}
 
 	private int[][] copyGrid()
@@ -86,7 +109,7 @@ public class Puzzle extends AbstractSearchNode
 		return copy;
 	}
 
-	private int[][] moveBlankUp()
+	public int[][] moveBlankUp()
 	{
 		int[][] newGrid = copyGrid();
 		int[] blankPos = new int[2];
@@ -109,7 +132,7 @@ public class Puzzle extends AbstractSearchNode
 		return newGrid;
 	}
 
-	private int[][] moveBlankDown()
+	public int[][] moveBlankDown()
 	{
 		int[][] newGrid = copyGrid();
 		int[] blankPos = new int[2];
@@ -132,7 +155,7 @@ public class Puzzle extends AbstractSearchNode
 		return newGrid;
 	}
 
-	private int[][] moveBlankLeft()
+	public int[][] moveBlankLeft()
 	{
 		int[][] newGrid = copyGrid();
 		int[] blankPos = new int[2];
@@ -155,7 +178,7 @@ public class Puzzle extends AbstractSearchNode
 		return newGrid;
 	}
 
-	private int[][] moveBlankRight()
+	public int[][] moveBlankRight()
 	{
 		int[][] newGrid = copyGrid();
 		int[] blankPos = new int[2];
