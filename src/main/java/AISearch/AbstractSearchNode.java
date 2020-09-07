@@ -48,7 +48,6 @@ public abstract class AbstractSearchNode
 	public abstract ArrayList<AbstractSearchNode> generateChildNodes();
 
 	public abstract boolean equalsNode(AbstractSearchNode node);
-	// might replace this with a recommendation to override the default equals method
 
 	public AbstractSearchNode getParentNode()
 	{

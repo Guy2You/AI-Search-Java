@@ -39,9 +39,7 @@ class AISearchTest
 				() -> assertThrows(GoalNodeNotFoundException.class, () -> AISearch.applyBreadthFirstSearch(shuffledPuzzle, shuffleDepth - 1)),
 				() -> assertThrows(GoalNodeNotFoundException.class, () -> AISearch.applyBreadthFirstSearch(shuffledPuzzle, true, shuffleDepth - 1)),
 				() -> assertThrows(GoalNodeNotFoundException.class, () -> AISearch.applyBreadthFirstSearch(shuffledPuzzle, false, shuffleDepth - 1)),
-				() -> assertThrows(GoalNodeNotFoundException.class, () -> AISearch.applyDepthFirstSearch(shuffledPuzzle, shuffleDepth - 1)),
-				() -> assertThrows(GoalNodeNotFoundException.class, () -> AISearch.applyDepthFirstSearch(shuffledPuzzle, true, shuffleDepth - 1)),
-				() -> assertThrows(GoalNodeNotFoundException.class, () -> AISearch.applyDepthFirstSearch(shuffledPuzzle, false, shuffleDepth - 1))
+				() -> assertThrows(GoalNodeNotFoundException.class, () -> AISearch.applyDepthFirstSearch(shuffledPuzzle, shuffleDepth - 1))
 		);
 	}
 
@@ -61,13 +59,7 @@ class AISearchTest
 				() -> assertThrows(IllegalArgumentException.class, () -> AISearch.applyBreadthFirstSearch(solvedPuzzle, false, Integer.MIN_VALUE)),
 				() -> assertThrows(IllegalArgumentException.class, () -> AISearch.applyDepthFirstSearch(solvedPuzzle, 0)),
 				() -> assertThrows(IllegalArgumentException.class, () -> AISearch.applyDepthFirstSearch(solvedPuzzle, -1)),
-				() -> assertThrows(IllegalArgumentException.class, () -> AISearch.applyDepthFirstSearch(solvedPuzzle, Integer.MIN_VALUE)),
-				() -> assertThrows(IllegalArgumentException.class, () -> AISearch.applyDepthFirstSearch(solvedPuzzle, true, 0)),
-				() -> assertThrows(IllegalArgumentException.class, () -> AISearch.applyDepthFirstSearch(solvedPuzzle, true, -1)),
-				() -> assertThrows(IllegalArgumentException.class, () -> AISearch.applyDepthFirstSearch(solvedPuzzle, true, Integer.MIN_VALUE)),
-				() -> assertThrows(IllegalArgumentException.class, () -> AISearch.applyDepthFirstSearch(solvedPuzzle, false, 0)),
-				() -> assertThrows(IllegalArgumentException.class, () -> AISearch.applyDepthFirstSearch(solvedPuzzle, false, -1)),
-				() -> assertThrows(IllegalArgumentException.class, () -> AISearch.applyDepthFirstSearch(solvedPuzzle, false, Integer.MIN_VALUE))
+				() -> assertThrows(IllegalArgumentException.class, () -> AISearch.applyDepthFirstSearch(solvedPuzzle, Integer.MIN_VALUE))
 		);
 	}
 
@@ -77,12 +69,10 @@ class AISearchTest
 	void alwaysFindShallowSolution()
 	{
 		assertAll(
-				() -> assertEquals(8, AISearch.applyBreadthFirstSearch(shuffledPuzzle, 8).getNodeDepth()),
-				() -> assertEquals(8, AISearch.applyBreadthFirstSearch(shuffledPuzzle, true, 8).getNodeDepth()),
-				() -> assertEquals(8, AISearch.applyBreadthFirstSearch(shuffledPuzzle, false, 8).getNodeDepth()),
-				() -> assertEquals(8, AISearch.applyDepthFirstSearch(shuffledPuzzle, 8).getNodeDepth()),
-				() -> assertEquals(8, AISearch.applyDepthFirstSearch(shuffledPuzzle, true, 8).getNodeDepth()),
-				() -> assertEquals(8, AISearch.applyDepthFirstSearch(shuffledPuzzle, false, 8).getNodeDepth())
+				() -> assertEquals(8, AISearch.applyBreadthFirstSearch(shuffledPuzzle, shuffleDepth).getNodeDepth()),
+				() -> assertEquals(8, AISearch.applyBreadthFirstSearch(shuffledPuzzle, true, shuffleDepth).getNodeDepth()),
+				() -> assertEquals(8, AISearch.applyBreadthFirstSearch(shuffledPuzzle, false, shuffleDepth).getNodeDepth()),
+				() -> assertEquals(8, AISearch.applyDepthFirstSearch(shuffledPuzzle, shuffleDepth).getNodeDepth())
 		);
 	}
 
@@ -121,9 +111,7 @@ class AISearchTest
 	void depthFirstFindsSolution()
 	{
 		assertAll(
-				() -> assertTrue(AISearch.applyDepthFirstSearch(shuffledPuzzle, 12).inGoalState()),
-				() -> assertTrue(AISearch.applyDepthFirstSearch(shuffledPuzzle, true, 12).inGoalState()),
-				() -> assertTrue(AISearch.applyDepthFirstSearch(shuffledPuzzle, false, 12).inGoalState())
+				() -> assertTrue(AISearch.applyDepthFirstSearch(shuffledPuzzle, shuffleDepth + 4).inGoalState())
 		);
 	}
 }

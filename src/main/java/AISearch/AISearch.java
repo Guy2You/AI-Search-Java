@@ -18,14 +18,16 @@ public class AISearch
 	{
 		try
 		{
-			return applyDepthFirstSearch(originNode, true, Integer.MAX_VALUE);
+			//return applyDepthFirstSearch(originNode, true, Integer.MAX_VALUE);
+			return applyDepthFirstSearch(originNode, Integer.MAX_VALUE);
 		} catch (GoalNodeNotFoundException e)
 		{
 			throw new GoalNodeNotFoundException("No solution found at the maximum depth limit.");
 		}
 	}
 
-	/**
+	/*
+	/
 	 * Applies depth first search on the node given to it.
 	 * Nodes will be expanded to a maximum depth of Integer.MAX_VALUE.
 	 *
@@ -33,7 +35,7 @@ public class AISearch
 	 * @param pruneExpandedNodes If this flag is set then then any nodes that satisfy the node equality function on nodes that have already been expanded are skipped.
 	 * @return The first node found that matches the goal state.
 	 * @throws GoalNodeNotFoundException If all nodes have been expanded to the depth limit and no goal node is found this exception will be thrown.
-	 */
+	 /
 	public static AbstractSearchNode applyDepthFirstSearch(AbstractSearchNode originNode, boolean pruneExpandedNodes) throws GoalNodeNotFoundException
 	{
 		try
@@ -54,14 +56,14 @@ public class AISearch
 	 * @return The first node found that matches the goal state.
 	 * @throws GoalNodeNotFoundException If all nodes have been expanded to the depth limit and no goal node is found this exception will be thrown.
 	 * @throws IllegalArgumentException  If the depth limit is too small this exception will be thrown.
-	 */
+	 /
 	public static AbstractSearchNode applyDepthFirstSearch(AbstractSearchNode originNode, int depthLimit) throws GoalNodeNotFoundException, IllegalArgumentException
 	{
 		return applyDepthFirstSearch(originNode, true, depthLimit);
 	}
 
 
-	/**
+	/
 	 * Applies depth first search on the node given to it.
 	 *
 	 * @param originNode         The root node of the depth first search.
@@ -73,7 +75,18 @@ public class AISearch
 	 * @throws GoalNodeNotFoundException If all nodes have been expanded to the depth limit and no goal node is found this exception will be thrown.
 	 * @throws IllegalArgumentException  If the depth limit is too small this exception will be thrown.
 	 */
-	public static AbstractSearchNode applyDepthFirstSearch(AbstractSearchNode originNode, boolean pruneExpandedNodes, int depthLimit) throws GoalNodeNotFoundException, IllegalArgumentException
+	//public static AbstractSearchNode applyDepthFirstSearch(AbstractSearchNode originNode, boolean pruneExpandedNodes, int depthLimit) throws GoalNodeNotFoundException, IllegalArgumentException
+
+	/**
+	 * Applies depth first search on the node given to it.
+	 *
+	 * @param originNode The root node of the depth first search.
+	 * @param depthLimit The depth of the deepest node that will be checked if it is in the goal state. Any nodes at this depth will not be added to the fringe.
+	 * @return The first node found that matches the goal state.
+	 * @throws GoalNodeNotFoundException If all nodes have been expanded to the depth limit and no goal node is found this exception will be thrown.
+	 * @throws IllegalArgumentException  If the depth limit is too small this exception will be thrown.
+	 */
+	public static AbstractSearchNode applyDepthFirstSearch(AbstractSearchNode originNode, int depthLimit) throws GoalNodeNotFoundException, IllegalArgumentException
 	{
 		if (depthLimit < 1)
 		{
@@ -85,16 +98,18 @@ public class AISearch
 			return originNode;
 		}
 		ArrayList<AbstractSearchNode> fringe = new ArrayList<>();
-		ArrayList<AbstractSearchNode> expandedNodes = new ArrayList<>();
+		//ArrayList<AbstractSearchNode> expandedNodes = new ArrayList<>();
 		fringe.add(originNode);
 		AbstractSearchNode currentNode;
 		while (!fringe.isEmpty())
 		{
 			currentNode = fringe.remove(fringe.size() - 1);
+			/*
 			if (pruneExpandedNodes)
 			{
 				expandedNodes.add(currentNode);
 			}
+			 */
 			ArrayList<AbstractSearchNode> newNodes = currentNode.generateChildNodes();
 			Collections.shuffle(newNodes);
 			for (AbstractSearchNode node : newNodes)
@@ -107,7 +122,9 @@ public class AISearch
 				if (!(currentNode.getNodeDepth() < depthLimit - 1))
 				{
 					addToFringe = false;
-				} else if (pruneExpandedNodes)
+				}
+				/*
+				else if (pruneExpandedNodes)
 				{
 					for (AbstractSearchNode exNode : expandedNodes)
 					{
@@ -118,6 +135,7 @@ public class AISearch
 						}
 					}
 				}
+				 */
 				if (addToFringe)
 				{
 					fringe.add(node);
