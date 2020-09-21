@@ -2,7 +2,9 @@ package AISearch;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AISearch
 {
@@ -120,7 +122,7 @@ public class AISearch
 					return node;
 				}
 				boolean addToFringe = true;
-				if (!(currentNode.getNodeDepth() < depthLimit - 1))
+				if (!(currentNode.getNodeDepth() < depthLimit - 1) || node.equalsNode(currentNode))
 				{
 					addToFringe = false;
 				}
@@ -245,7 +247,7 @@ public class AISearch
 					return node;
 				}
 				boolean addToFringe = true;
-				if (!(currentNode.getNodeDepth() < depthLimit - 1))
+				if (!(currentNode.getNodeDepth() < depthLimit - 1) || node.equalsNode(currentNode))
 				{
 					addToFringe = false;
 				} else if (pruneExpandedNodes)
@@ -268,7 +270,8 @@ public class AISearch
 		throw new GoalNodeNotFoundException("No solution found up to a depth of: " + depthLimit);
 	}
 
-	public static AbstractSearchNode applyHeuristicSearch(AbstractSearchNode originNode, boolean pruneExpandedNodes, int depthLimit) throws GoalNodeNotFoundException, IllegalArgumentException
+	//public static AbstractSearchNode applyHeuristicSearch(AbstractSearchNode originNode, boolean pruneExpandedNodes, int depthLimit) throws GoalNodeNotFoundException, IllegalArgumentException
+	public static AbstractSearchNode applyHeuristicSearch(AbstractSearchNode originNode, int depthLimit) throws GoalNodeNotFoundException, IllegalArgumentException
 	{
 		if (depthLimit < 1)
 		{
@@ -280,12 +283,44 @@ public class AISearch
 			return originNode;
 		}
 		TreeMap<Integer, ArrayList<AbstractSearchNode>> fringe = new TreeMap<>();
+		AtomicReference<AbstractSearchNode> currentNode = null;
 		ArrayList<AbstractSearchNode> expandedNodes = new ArrayList<>();
-		originNode.calculateHeuristic();
-		fringe.computeIfAbsent(originNode.getHeuristicValue(), key -> new ArrayList<>());
-		while (fringe)
-
-
+		fringe.compute(originNode.getHeuristicValue(), (key, value) -> new ArrayList<>(List.of(originNode)));
+		while (!fringe.isEmpty())
+		{
+			fringe.computeIfPresent(fringe.firstKey(), (key, list) ->
+			{
+				currentNode.set(list.remove(0));
+				if (list.isEmpty())
+				{
+					return null;
+				}
+				return list;
+			});
+			ArrayList<AbstractSearchNode> newNodes = currentNode.get().generateChildNodes();
+			for (AbstractSearchNode node : newNodes)
+			{
+				if (node.inGoalState())
+				{
+					return node;
+				}
+				boolean addToFringe = true;
+				if (!(currentNode.get().getNodeDepth() < depthLimit - 1) || node.equalsNode(currentNode.get()))
+				{
+					addToFringe = false;
+				}
+				if (addToFringe)
+				{
+					fringe.computeIfPresent(node.calculateHeuristic() + node.getNodeDepth(), (key, value) ->
+					{
+						value.add(node);
+						return value;
+					});
+					fringe.computeIfAbsent(node.calculateHeuristic() + node.getNodeDepth(), key -> new ArrayList<>(List.of(node)));
+				}
+			}
+		}
+		throw new GoalNodeNotFoundException("No solution found up to a depth of: " + depthLimit);
 	}
 }
 

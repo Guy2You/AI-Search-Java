@@ -223,4 +223,10 @@ public class Puzzle extends AbstractSearchNode
 	{
 		return Arrays.deepEquals(((Puzzle) node).grid, this.grid);
 	}
+
+	@Override
+	public Integer calculateHeuristic()
+	{
+
+	}
 }

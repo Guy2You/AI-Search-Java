@@ -39,7 +39,7 @@ public abstract class AbstractSearchNode
 	 *
 	 * @return The heuristics value.
 	 */
-	abstract Integer calculateHeuristic();
+	public abstract Integer calculateHeuristic();
 
 	public Integer getHeuristicValue()
 	{
