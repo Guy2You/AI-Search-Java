@@ -2,6 +2,7 @@ package AISearch;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.TreeMap;
 
 public class AISearch
 {
@@ -265,6 +266,26 @@ public class AISearch
 			}
 		}
 		throw new GoalNodeNotFoundException("No solution found up to a depth of: " + depthLimit);
+	}
+
+	public static AbstractSearchNode applyHeuristicSearch(AbstractSearchNode originNode, boolean pruneExpandedNodes, int depthLimit) throws GoalNodeNotFoundException, IllegalArgumentException
+	{
+		if (depthLimit < 1)
+		{
+			throw new IllegalArgumentException(String.format("A depth limit of %d is too low. Expected > 1.", depthLimit));
+		}
+		originNode.setNodeDepth(0);
+		if (originNode.inGoalState())
+		{
+			return originNode;
+		}
+		TreeMap<Integer, ArrayList<AbstractSearchNode>> fringe = new TreeMap<>();
+		ArrayList<AbstractSearchNode> expandedNodes = new ArrayList<>();
+		originNode.calculateHeuristic();
+		fringe.computeIfAbsent(originNode.getHeuristicValue(), key -> new ArrayList<>());
+		while (fringe)
+
+
 	}
 }
 
