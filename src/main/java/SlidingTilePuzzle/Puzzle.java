@@ -95,6 +95,30 @@ public class Puzzle extends AbstractSearchNode
 		}
 	}
 
+	public boolean solutionPossible()
+	{
+		int permutationInversions = 0;
+		for (int i = 2; i < Math.pow(this.sideLength, 2); i++)
+		{
+			int numberLessThanI = 0;
+			for (int j = 0; j < this.sideLength; j++)
+			{
+				for (int k = 0; k < this.sideLength; k++)
+				{
+					if (this.grid[i][j] == i)
+					{
+						numberLessThanI = 0;
+					} else if (this.grid[i][j] < i && this.grid[i][j] != 0)
+					{
+						numberLessThanI++;
+					}
+				}
+			}
+			permutationInversions += numberLessThanI;
+		}
+		return permutationInversions + this.getBlankPosition()[0] % 2 == 0;
+	}
+
 	private int[][] copyGrid()
 	{
 		int[][] copy = new int[this.sideLength][this.sideLength];
@@ -109,21 +133,32 @@ public class Puzzle extends AbstractSearchNode
 		return copy;
 	}
 
-	public int[][] moveBlankUp()
+	private int[] getBlankPosition()
 	{
-		int[][] newGrid = copyGrid();
-		int[] blankPos = new int[2];
-		for (int i = 0; i < newGrid.length; i++)
+		return getPositionOf(0);
+	}
+
+	private int[] getPositionOf(int val)
+	{
+		int[] pos = new int[2];
+		for (int i = 0; i < grid.length; i++)
 		{
-			for (int j = 0; j < newGrid[i].length; j++)
+			for (int j = 0; j < grid[i].length; j++)
 			{
-				if (newGrid[i][j] == 0)
+				if (grid[i][j] == val)
 				{
-					blankPos[0] = i;
-					blankPos[1] = j;
+					pos[0] = i;
+					pos[1] = j;
 				}
 			}
 		}
+		return pos;
+	}
+
+	public int[][] moveBlankUp()
+	{
+		int[][] newGrid = copyGrid();
+		int[] blankPos = getBlankPosition();
 		if (!(blankPos[0] == 0))
 		{
 			newGrid[blankPos[0]][blankPos[1]] = newGrid[blankPos[0] - 1][blankPos[1]];
@@ -135,18 +170,7 @@ public class Puzzle extends AbstractSearchNode
 	public int[][] moveBlankDown()
 	{
 		int[][] newGrid = copyGrid();
-		int[] blankPos = new int[2];
-		for (int i = 0; i < newGrid.length; i++)
-		{
-			for (int j = 0; j < newGrid[i].length; j++)
-			{
-				if (newGrid[i][j] == 0)
-				{
-					blankPos[0] = i;
-					blankPos[1] = j;
-				}
-			}
-		}
+		int[] blankPos = getBlankPosition();
 		if (!(blankPos[0] == this.sideLength - 1))
 		{
 			newGrid[blankPos[0]][blankPos[1]] = newGrid[blankPos[0] + 1][blankPos[1]];
@@ -158,18 +182,7 @@ public class Puzzle extends AbstractSearchNode
 	public int[][] moveBlankLeft()
 	{
 		int[][] newGrid = copyGrid();
-		int[] blankPos = new int[2];
-		for (int i = 0; i < newGrid.length; i++)
-		{
-			for (int j = 0; j < newGrid[i].length; j++)
-			{
-				if (newGrid[i][j] == 0)
-				{
-					blankPos[0] = i;
-					blankPos[1] = j;
-				}
-			}
-		}
+		int[] blankPos = getBlankPosition();
 		if (!(blankPos[1] == 0))
 		{
 			newGrid[blankPos[0]][blankPos[1]] = newGrid[blankPos[0]][blankPos[1] - 1];
@@ -181,18 +194,7 @@ public class Puzzle extends AbstractSearchNode
 	public int[][] moveBlankRight()
 	{
 		int[][] newGrid = copyGrid();
-		int[] blankPos = new int[2];
-		for (int i = 0; i < newGrid.length; i++)
-		{
-			for (int j = 0; j < newGrid[i].length; j++)
-			{
-				if (newGrid[i][j] == 0)
-				{
-					blankPos[0] = i;
-					blankPos[1] = j;
-				}
-			}
-		}
+		int[] blankPos = getBlankPosition();
 		if (!(blankPos[1] == this.sideLength - 1))
 		{
 			newGrid[blankPos[0]][blankPos[1]] = newGrid[blankPos[0]][blankPos[1] + 1];
@@ -227,6 +229,21 @@ public class Puzzle extends AbstractSearchNode
 	@Override
 	public Integer calculateHeuristic()
 	{
-
+		int heuristicValue = 0;
+		int[] intendedPosition = new int[2];
+		int[] actualPosition;
+		for (int n = 1; n < Math.pow(this.sideLength, 2); n++)
+		{
+			intendedPosition[0] = intendedPosition[0] + 1;
+			if (intendedPosition[0] > sideLength)
+			{
+				intendedPosition[0] = 0;
+				intendedPosition[1] = intendedPosition[1] + 1;
+			}
+			actualPosition = getPositionOf(n);
+			heuristicValue += Math.abs(intendedPosition[0] - actualPosition[0]);
+			heuristicValue += Math.abs(intendedPosition[1] - actualPosition[1]);
+		}
+		return heuristicValue;
 	}
 }

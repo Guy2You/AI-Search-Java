@@ -313,6 +313,7 @@ public class AISearch
 				{
 					fringe.computeIfPresent(node.calculateHeuristic() + node.getNodeDepth(), (key, value) ->
 					{
+						//value.add(0, node); // FIXME: 22/09/2020 this might be a better way to implement this (it makes the search more depth first than breadth first)
 						value.add(node);
 						return value;
 					});
