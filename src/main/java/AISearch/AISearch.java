@@ -283,7 +283,7 @@ public class AISearch
 			return originNode;
 		}
 		TreeMap<Integer, ArrayList<AbstractSearchNode>> fringe = new TreeMap<>();
-		AtomicReference<AbstractSearchNode> currentNode = null;
+		AtomicReference<AbstractSearchNode> currentNode = new AtomicReference<>();
 		ArrayList<AbstractSearchNode> expandedNodes = new ArrayList<>();
 		fringe.compute(originNode.getHeuristicValue(), (key, value) -> new ArrayList<>(List.of(originNode)));
 		while (!fringe.isEmpty())

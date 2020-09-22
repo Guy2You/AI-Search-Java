@@ -1,4 +1,5 @@
 import AISearch.AISearch;
+import AISearch.AbstractSearchNode;
 import AISearch.GoalNodeNotFoundException;
 import SlidingTilePuzzle.Puzzle;
 import org.junit.jupiter.api.BeforeAll;
@@ -112,6 +113,16 @@ class AISearchTest
 	{
 		assertAll(
 				() -> assertTrue(AISearch.applyDepthFirstSearch(shuffledPuzzle, shuffleDepth + 4).inGoalState())
+		);
+	}
+
+	@DisplayName("Solution returned by A* search is correct")
+	@Test
+	void aStarFindsSolution() throws GoalNodeNotFoundException
+	{
+		AbstractSearchNode solutionNode = AISearch.applyHeuristicSearch(shuffledPuzzle, shuffleDepth);
+		assertAll(
+				() -> assertTrue(solutionNode.inGoalState() && solutionNode.getNodeDepth() == shuffleDepth)
 		);
 	}
 }
